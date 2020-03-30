@@ -1,11 +1,20 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import * as Sentry from '@sentry/node';
+import { sentryConfig } from 'config';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+Sentry.init(sentryConfig);
+app.use(Sentry.Handlers.requestHandler());
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(Sentry.Handlers.errorHandler());
+}
 
 app.disable('x-powered-by');
 app.listen(process.env.PORT, () =>
