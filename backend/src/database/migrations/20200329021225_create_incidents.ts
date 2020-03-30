@@ -10,7 +10,12 @@ export async function up(knex: Knex): Promise<any> {
 
     table.string('ong_id').notNullable();
 
-    table.foreign('ong_id').references('id').inTable('ongs');
+    table
+      .foreign('ong_id')
+      .references('id')
+      .inTable('ongs')
+      .onDelete('CASCADE')
+      .onUpdate('CASCADE');
   });
 }
 
