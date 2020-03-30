@@ -26,6 +26,7 @@ routes.get('/incidents/:id', IncidentsController.show);
 /** Private Routes */
 routes.use(Authentication);
 
+routes.get('/profile', OngController.show);
 routes.put('/ongs', OngController.update);
 routes.delete('/ongs', OngController.delete);
 

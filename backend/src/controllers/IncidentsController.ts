@@ -32,26 +32,23 @@ export default {
     }
   },
   async create(req: Request, res: Response) {
-    const { title, description, value, ongId } = req.body;
+    const { ongId } = req.headers;
+    const { title, description, value } = req.body;
 
     try {
-      const incident: IIncidentsDTO[] = await dbConnection('incidents').insert(
-        {
-          title,
-          description,
-          value,
-          ong_id: ongId,
-        },
-        ['id']
-      );
+      const [id]: IIncidentsDTO[] = await dbConnection('incidents').insert({
+        title,
+        description,
+        value,
+        ong_id: ongId,
+      });
 
-      const response = incident[0].id
-        ? incident[0]
-        : { title, description, value, ong_id: ongId };
+      const incident = { id, title, description, value, ong_id: ongId };
 
       const { name, email }: IOngDTO = await dbConnection('ongs')
         .where({ id: ongId })
-        .select('name', 'email');
+        .select('name', 'email')
+        .first();
 
       const Mail = new EmailService();
 
@@ -61,17 +58,17 @@ export default {
           email: 'contact@bethehero.com',
         },
         to: {
-          name: name,
-          email: email,
+          name,
+          email,
         },
         message: {
           subject: 'Bem vindo ao Be The Hero',
           template: 'createAccount',
-          context: { name: name, incident: { title, description, value } },
+          context: { name, incident },
         },
       });
 
-      return res.json({ inserted: response, success: true });
+      return res.json(incident);
     } catch (error) {
       return res.status(400).json({ error });
     }
@@ -110,7 +107,7 @@ export default {
         .where({ id, ong_id: ongId })
         .update(data);
 
-      return res.json({ incident });
+      return res.json(incident);
     } catch (error) {
       return res.status(400).json({ error });
     }

@@ -1,28 +1,26 @@
-import Knex from 'knex';
 import { Request, Response } from 'express';
-import { dbConfig } from 'config';
+import dbConnection from 'database';
 
 import EmailService from 'services/EmailService';
 import PasswordService from 'services/PasswordService';
 
-import { IOngDTO } from 'interfaces';
-
-const dbConnection: Knex = Knex(
-  dbConfig[process.env.NODE_ENV || 'development'] as Knex.Config
-);
+import { IOngDTO, ICountDTO } from 'interfaces';
 
 export default {
   async index(req: Request, res: Response) {
     const { max = 10, page = 0 } = req.query;
 
     try {
+      const [{ count }]: ICountDTO[] = await dbConnection('ongs').count({
+        count: '*',
+      });
+
       const ongs: IOngDTO[] = await dbConnection('ongs')
         .select('id', 'name', 'email', 'whatsapp', 'cidade', 'uf')
-        .returning(['id', 'name', 'email', 'whatsapp', 'cidade', 'uf'])
         .limit(max)
         .offset(page * max);
 
-      return res.json(ongs);
+      return res.json({ ongs, listFullSize: count });
     } catch (error) {
       return res.status(400).json({ error });
     }
@@ -34,19 +32,16 @@ export default {
     const passwordHash = await Password.encryptPassword({ password });
 
     try {
-      const ong: IOngDTO[] = await dbConnection('ongs').insert(
-        {
-          name,
-          email,
-          password: passwordHash,
-          whatsapp,
-          cidade,
-          uf,
-        },
-        ['id']
-      );
+      const [id]: IOngDTO[] = await dbConnection('ongs').insert({
+        name,
+        email,
+        password: passwordHash,
+        whatsapp,
+        cidade,
+        uf,
+      });
 
-      const response = ong[0].id ? ong[0] : { name, email };
+      const ong = { name, email, id };
 
       const Mail = new EmailService();
 
@@ -66,34 +61,36 @@ export default {
         },
       });
 
-      return res.json({ inserted: response, success: true });
+      return res.json(ong);
     } catch (error) {
       return res.status(400).json({ error });
     }
   },
   async show(req: Request, res: Response) {
-    const { id } = req.params;
+    const { ongId } = req.headers;
+    const { email } = req.body;
 
     try {
       const ong: IOngDTO = await dbConnection('ongs')
-        .where({ id })
-        .select('id', 'name', 'email', 'whatsapp', 'cidade', 'uf');
+        .where({ id: ongId, email })
+        .select('id', 'name', 'email', 'whatsapp', 'cidade', 'uf')
+        .first();
 
-      return res.json({ ong });
+      return res.json(ong);
     } catch (error) {
       return res.status(error.status).json({ error });
     }
   },
   async update(req: Request, res: Response) {
     const { ongId } = req.headers;
-    const data = req.body;
+    const { email, ...data } = req.body;
 
     try {
       const ong: IOngDTO = await dbConnection('ongs')
-        .where({ id: ongId, email: data.email })
+        .where({ id: ongId, email })
         .update(data);
 
-      return res.json({ ong });
+      return res.json(ong);
     } catch (error) {
       return res.status(400).json({ error });
     }
