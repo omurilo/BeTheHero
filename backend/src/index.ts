@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import * as Sentry from '@sentry/node';
 import { sentryConfig } from 'config';
+import { ErrorHandler } from 'middlewares';
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.use(Sentry.Handlers.requestHandler());
 if (process.env.NODE_ENV === 'production') {
   app.use(Sentry.Handlers.errorHandler());
 }
+
+app.use(ErrorHandler);
 
 app.disable('x-powered-by');
 app.listen(process.env.PORT, () =>
