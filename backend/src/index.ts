@@ -4,6 +4,7 @@ import cors from 'cors';
 import * as Sentry from '@sentry/node';
 import { sentryConfig } from 'config';
 import { ErrorHandler } from 'middlewares';
+import routes from 'routes';
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use(express.json());
 
 Sentry.init(sentryConfig);
 app.use(Sentry.Handlers.requestHandler());
+
+app.use(routes);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(Sentry.Handlers.errorHandler());
