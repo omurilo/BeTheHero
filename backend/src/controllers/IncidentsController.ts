@@ -1,27 +1,32 @@
-import Knex from 'knex';
 import { Request, Response } from 'express';
-import { dbConfig } from 'config';
-
+import dbConnection from 'database';
 import EmailService from 'services/EmailService';
 
-import { IOngDTO, IIncidentsDTO } from 'interfaces';
-
-const dbConnection: Knex = Knex(
-  dbConfig[process.env.NODE_ENV || 'development'] as Knex.Config
-);
+import { IOngDTO, IIncidentsDTO, ICountDTO } from 'interfaces';
 
 export default {
   async index(req: Request, res: Response) {
     const { max = 10, page = 0 } = req.query;
 
     try {
-      const incidents: IIncidentsDTO[] = await dbConnection('incidents')
-        .select('id', 'title', 'description', 'value', 'ong_id')
-        .returning(['id', 'title', 'description', 'value', 'ong_id'])
-        .limit(max)
-        .offset(page * max);
+      const [{ count }]: ICountDTO[] = await dbConnection('incidents').count({
+        count: '*',
+      });
 
-      return res.json({ incidents });
+      const incidents: IIncidentsDTO[] = await dbConnection('incidents')
+        .join('ongs', { 'incidents.ong_id': 'ongs.id' })
+        .limit(max)
+        .offset(page * max)
+        .select(
+          'incidents.*',
+          'ongs.name',
+          'ongs.email',
+          'ongs.whatsapp',
+          'ongs.cidade',
+          'ongs.uf'
+        );
+
+      return res.json({ incidents, listFullSize: count });
     } catch (error) {
       return res.status(400).json({ error });
     }
@@ -76,10 +81,19 @@ export default {
 
     try {
       const incident: IIncidentsDTO = await dbConnection('incidents')
-        .where({ id })
-        .select('id', 'title', 'description', 'value', 'ong_id');
+        .join('ongs', { 'incidents.ong_id': 'ongs.id' })
+        .where('incidents.id', id)
+        .select(
+          'incidents.*',
+          'ongs.name',
+          'ongs.email',
+          'ongs.whatsapp',
+          'ongs.cidade',
+          'ongs.uf'
+        )
+        .first();
 
-      return res.json({ incident });
+      return res.json(incident);
     } catch (error) {
       return res.status(400).json({ error });
     }

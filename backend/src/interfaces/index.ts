@@ -40,3 +40,7 @@ export interface IGenerateTokenDTO {
   id: string;
   email: string;
 }
+
+export interface ICountDTO {
+  count: { count: Number };
+}
