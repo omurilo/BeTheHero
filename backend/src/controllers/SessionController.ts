@@ -1,23 +1,19 @@
-import Knex from 'knex';
 import { Request, Response } from 'express';
-import { dbConfig } from 'config';
+import dbConnection from 'database';
 
 import PasswordService from 'services/PasswordService';
 
 import { IOngPassordDTO } from 'interfaces';
-
-const dbConnection: Knex = Knex(
-  dbConfig[process.env.NODE_ENV || 'development'] as Knex.Config
-);
 
 export default {
   async create(req: Request, res: Response) {
     const { email, password } = req.body;
 
     try {
-      const [ong]: IOngPassordDTO[] = await dbConnection('ongs')
+      const ong: IOngPassordDTO = await dbConnection('ongs')
         .where({ email })
-        .select('id', 'email', 'name', 'cidade', 'uf', 'password');
+        .select('id', 'email', 'name', 'cidade', 'uf', 'password')
+        .first();
 
       const Password = new PasswordService();
 
