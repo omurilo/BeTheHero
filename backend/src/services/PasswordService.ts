@@ -7,9 +7,12 @@ import {
 } from 'interfaces';
 
 class PasswordService implements IPasswordService {
-  async encryptPassword({ password }: IPasswordEncryptDTO): Promise<string> {
+  async encryptPassword({
+    password,
+    salt = 10,
+  }: IPasswordEncryptDTO): Promise<string> {
     try {
-      const passwordHash = await bcrypt.hash(password, 10);
+      const passwordHash = await bcrypt.hash(password, salt);
 
       return passwordHash;
     } catch (error) {

@@ -20,11 +20,12 @@ export interface IIncidentsDTO {
 }
 
 export interface IPasswordEncryptDTO {
-  password: string;
+  password: string | any;
+  salt?: string | number;
 }
 
 export interface IPasswordDecryptDTO {
-  password: string;
+  password: string | any;
   passwordHash: string;
 }
 
