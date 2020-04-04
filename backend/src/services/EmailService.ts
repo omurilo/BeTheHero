@@ -1,45 +1,20 @@
 import path from 'path';
-import nodemailer, { SendMailOptions, SentMessageInfo } from 'nodemailer';
+import nodemailer from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
 import mailConfig from 'config/mail';
 
-interface IMailToFrom {
-  name: string;
-  email: string;
-}
-
-interface IMailMessage {
-  subject: string;
-  body?: string;
-  template?: string;
-  context?: object;
-  attachment?: string[];
-}
-
-interface IMessageDTO {
-  from: IMailToFrom;
-  to: IMailToFrom;
-  message: IMailMessage;
-}
-
-interface IEmailService {
-  sendMail(request: IMessageDTO): void;
-}
-
-interface IMailOptions extends SendMailOptions {
-  template?: string;
-  context?: object;
-}
-
-declare type MailOptions<T extends SendMailOptions = SendMailOptions> = (
-  mailOptions: T
-) => Promise<SentMessageInfo>;
+import {
+  IMessageDTO,
+  IEmailService,
+  IMailOptions,
+  MailOptions,
+} from 'interfaces';
 
 class EmailService implements IEmailService {
   sendMail({ from, to, message }: IMessageDTO) {
-    const transporter = nodemailer.createTransport(mailConfig);
-
     const viewPath = path.resolve(__dirname, '..', 'views', 'emails');
+
+    const transporter = nodemailer.createTransport(mailConfig);
 
     transporter.use(
       'compile',
@@ -55,9 +30,8 @@ class EmailService implements IEmailService {
       })
     );
 
-    const sendHtmlMail: MailOptions<IMailOptions> = transporter.sendMail.bind(
-      transporter
-    );
+    const sendHtmlMail: MailOptions<IMailOptions> = (mailOptions) =>
+      transporter.sendMail(mailOptions);
 
     return sendHtmlMail({
       from: `${from.name} <${from.email}>`,

@@ -1,16 +1,13 @@
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
-import { authConfig } from '../config';
 
 import {
   IPasswordEncryptDTO,
   IPasswordDecryptDTO,
   IPasswordService,
-  IGenerateTokenDTO,
 } from 'interfaces';
 
 class PasswordService implements IPasswordService {
-  async encryptPassword({ password }: IPasswordEncryptDTO) {
+  async encryptPassword({ password }: IPasswordEncryptDTO): Promise<string> {
     try {
       const passwordHash = await bcrypt.hash(password, 10);
 
@@ -20,7 +17,10 @@ class PasswordService implements IPasswordService {
     }
   }
 
-  async checkPassword({ password, passwordHash }: IPasswordDecryptDTO) {
+  async checkPassword({
+    password,
+    passwordHash,
+  }: IPasswordDecryptDTO): Promise<boolean> {
     try {
       const verified = await bcrypt.compare(password, passwordHash);
 
@@ -28,27 +28,6 @@ class PasswordService implements IPasswordService {
     } catch (error) {
       throw new Error('Not its possible decrypt a password!');
     }
-  }
-
-  async generateToken({ id, email }: IGenerateTokenDTO) {
-    const token: string = await new Promise((resolve, reject) => {
-      jwt.sign(
-        { id, email },
-        authConfig.secret,
-        {
-          expiresIn: authConfig.ttl,
-        },
-        function (err, result) {
-          if (err) {
-            return reject(err);
-          }
-
-          return resolve(result);
-        }
-      );
-    });
-
-    return token;
   }
 }
 

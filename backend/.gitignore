@@ -28,3 +28,5 @@ dist/
 # Temporary folders
 tmp/
 temp/
+
+coverage/
