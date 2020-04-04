@@ -1,32 +1,33 @@
-<!-- 
-<h1 align="center">
-    <img alt="BeTheHero" title="#BeTheHero" src="frontend/src/assets/logo.svg" width="250px" />
-</h1> -->
 
-<h4 align="center"> 
+<h1 align="center">
+    <img alt="BeTheHero" title="#BeTheHero" src=".github/logo-be-the-hero.svg" width="250px" />
+</h1>
+
+<h4 align="center">
 	:construction: 🚀 Semana OmniStack 11.0 In progress.. :construction:
 </h4>
 <p align="center">
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/murilokaos/BeTheHero?color=%2304D361">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/murilokaos/BeTheHero?color=%23007acc">
 
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/murilokaos/BeTheHero">
 	
   <a href="https://www.linkedin.com/in/omurilo/">
-    <img alt="Made by Murilo Henrique" src="https://img.shields.io/badge/made%20by-Murilo Henrique-%2304D361">
+    <img alt="Made by Murilo Henrique" src="https://img.shields.io/badge/made%20by-Murilo Henrique-%23f7d353">
   </a>
 
   <a href="https://github.com/murilokaos/BeTheHero/commits/master">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/murilokaos/BeTheHero">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/murilokaos/BeTheHero?color=24292e">
   </a>
 
-<a aria-label="Completed" href="https://rocketseat.com.br/week-11">
-    <img src="https://img.shields.io/badge/OmniStack-done-green?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAALVBMVEVHcExxWsF0XMJzXMJxWcFsUsD///9jRrzY0u6Xh9Gsn9n39fyMecy0qd2bjNJWBT0WAAAABHRSTlMA2Do606wF2QAAAGlJREFUGJVdj1cWwCAIBLEsRU3uf9xobDH8+GZwUYi8i6ucJwrxKE+7D0G9Q4vlYqtmCSjndr4CgCgzlyFgfKfKCVO0LrPKjmiqMxGXkJwNnXskqWG+1oSM+BSwD8f29YLNjvx/OQrn+g99oQSoNmt3PgAAAABJRU5ErkJggg=="></img>
+  <a aria-label="Completed" href="https://rocketseat.com.br/week-11">
+    <img src="https://img.shields.io/badge/OmniStack-done-green?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAALVBMVEVHcExxWsF0XMJzXMJxWcFsUsD///9jRrzY0u6Xh9Gsn9n39fyMecy0qd2bjNJWBT0WAAAABHRSTlMA2Do606wF2QAAAGlJREFUGJVdj1cWwCAIBLEsRU3uf9xobDH8+GZwUYi8i6ucJwrxKE+7D0G9Q4vlYqtmCSjndr4CgCgzlyFgfKfKCVO0LrPKjmiqMxGXkJwNnXskqWG+1oSM+BSwD8f29YLNjvx/OQrn+g99oQSoNmt3PgAAAABJRU5ErkJggg==&color=7159c1"></img>
   </a>
   <img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
    <a href="https://github.com/murilokaos/BeTheHero/stargazers">
     <img alt="Stargazers" src="https://img.shields.io/github/stars/murilokaos/BeTheHero?style=social">
   </a>
 </p>
+
 <p align="center">
   <a href="https://insomnia.rest/run/?label=SemanaOmnistack11&uri=https://raw.githubusercontent.com/murilokaos/BeTheHero/master/backend/docs-29-03-2020.json" target="_blank"><img src="https://insomnia.rest/images/run.svg" alt="Run in Insomnia"></a>
 </p>
@@ -71,7 +72,7 @@ Para acessar o layout utilize a ferramenta [Figma](https://www.figma.com/file/2C
 
 ### The first thing is install the dependencies
   
-```js
+```bash
 cd backend && yarn
 cd frontend && yarn
 cd mobile && yarn
@@ -85,7 +86,7 @@ cd mobile && yarn
 
 ### And let's go!
 
-```js
+```bash
 docker-compose up -d
 // on another command line
 cd mobile && yarn react-native run-android or yarn react-native run-ios
@@ -100,9 +101,4 @@ This project is under the MIT license. See the LICENSE for details.
 
 *If everything goes well, now the system will be just waiting for you*
 
-<p align="left" style="display:flex;">
-<a href="https://www.linkedin.com/in/danielobara/">
-  <img alt="Honorable mention to Daniel Obara" src="https://img.shields.io/badge/honorable%20mention%20to-Daniel Obara-%2304D361"> 
-</a>
-<span style="margin-left:5px;font-size:16px">from whom I copied some things that I put in this readme.</span>
-</p>
+##### Made with ♥ by Murilo Henrique 👋 [Get in Touch](https://www.linkedin.com/in/omurilo)
