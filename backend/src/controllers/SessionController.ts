@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import dbConnection from 'database';
 
 import PasswordService from 'services/PasswordService';
+import AuthenticationService from 'services/AuthenticationService';
 
 import { IOngPassordDTO } from 'interfaces';
 
@@ -16,6 +17,7 @@ export default {
         .first();
 
       const Password = new PasswordService();
+      const Auth = new AuthenticationService();
 
       const validPassword = await Password.checkPassword({
         password,
@@ -23,7 +25,7 @@ export default {
       });
 
       if (validPassword) {
-        const token = await Password.generateToken({ id: ong.id, email });
+        const token = await Auth.generateToken({ id: ong.id, email });
         return res.status(200).json({
           token,
           ong: {

@@ -7,7 +7,7 @@ import {
 } from 'controllers';
 
 import { Authentication, Validation } from 'middlewares';
-import { Ongs, Incidents } from 'validators';
+import { Ongs, Incidents, Session } from 'validators';
 
 const routes = Router();
 
@@ -19,7 +19,11 @@ routes.get('/', (req, res) => {
 });
 
 /** Public Routes */
-routes.post('/login', SessionController.create);
+routes.post(
+  '/login',
+  Validation(Session.createSessionSchema),
+  SessionController.create
+);
 
 routes.get('/ongs', OngController.index);
 routes.post('/ongs', Validation(Ongs.createOngSchema), OngController.create);
