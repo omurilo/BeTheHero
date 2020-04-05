@@ -33,7 +33,13 @@ const updateOngSchema = yup.object().shape({
   }),
 });
 
-export default { createOngSchema, updateOngSchema };
+const deleteOngSchema = yup.object().shape({
+  params: yup.object().shape({
+    id: yup.string().required('It is necessary provide an ong id'),
+  }),
+});
+
+export default { createOngSchema, updateOngSchema, deleteOngSchema };
 
 /**
  { name, email, password, whatsapp, cidade, uf }
