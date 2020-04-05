@@ -6,7 +6,8 @@ import {
   SessionController,
 } from 'controllers';
 
-import { Authentication } from 'middlewares';
+import { Authentication, Validation } from 'middlewares';
+import { Ongs } from 'validators';
 
 const routes = Router();
 
@@ -18,7 +19,7 @@ routes.get('/', (req, res) => {
 routes.post('/login', SessionController.create);
 
 routes.get('/ongs', OngController.index);
-routes.post('/ongs', OngController.create);
+routes.post('/ongs', Validation(Ongs.createOngSchema), OngController.create);
 
 routes.get('/incidents', IncidentsController.index);
 routes.get('/incidents/:id', IncidentsController.show);
@@ -27,7 +28,7 @@ routes.get('/incidents/:id', IncidentsController.show);
 routes.use(Authentication);
 
 routes.get('/profile', OngController.show);
-routes.put('/ongs', OngController.update);
+routes.put('/ongs', Validation(Ongs.updateOngSchema), OngController.update);
 routes.delete('/ongs', OngController.delete);
 
 routes.post('/incidents', IncidentsController.create);

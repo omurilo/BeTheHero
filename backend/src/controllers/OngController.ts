@@ -22,16 +22,16 @@ export default {
 
       return res.json({ ongs, listFullSize: count });
     } catch (error) {
-      return res.status(400).json({ error });
+      return res.status(400).json(error);
     }
   },
   async create(req: Request, res: Response) {
     const { name, email, password, whatsapp, cidade, uf } = req.body;
-    const Password = new PasswordService();
-
-    const passwordHash = await Password.encryptPassword({ password });
 
     try {
+      const Password = new PasswordService();
+      const passwordHash = await Password.encryptPassword({ password });
+
       const [id]: IOngDTO[] = await dbConnection('ongs').insert({
         name,
         email,
@@ -63,7 +63,7 @@ export default {
 
       return res.json(ong);
     } catch (error) {
-      return res.status(400).json({ error });
+      return res.status(400).json(error);
     }
   },
   async show(req: Request, res: Response) {
@@ -78,12 +78,14 @@ export default {
 
       return res.json(ong);
     } catch (error) {
-      return res.status(error.status).json({ error });
+      return res.status(error.status).json(error);
     }
   },
   async update(req: Request, res: Response) {
     const { ongId } = req.headers;
-    const { email, ...data } = req.body;
+    const { email, name, password, whatsapp, cidade, uf } = req.body;
+
+    const data = { name, password, whatsapp, cidade, uf };
 
     try {
       const ong: IOngDTO = await dbConnection('ongs')
@@ -92,19 +94,19 @@ export default {
 
       return res.json(ong);
     } catch (error) {
-      return res.status(400).json({ error });
+      return res.status(400).json(error);
     }
   },
   async delete(req: Request, res: Response) {
     const { ongId } = req.headers;
-    const data = req.body;
+    const { email } = req.body;
 
     try {
-      await dbConnection('ongs').where({ id: ongId, email: data.email }).del();
+      await dbConnection('ongs').where({ id: ongId, email }).del();
 
       return res.status(204).send();
     } catch (error) {
-      return res.status(400).json({ error });
+      return res.status(400).json(error);
     }
   },
 };
