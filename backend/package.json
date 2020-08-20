@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@sentry/node": "^5.15.4",
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^5.0.0",
     "bull": "^3.13.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
